@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import NextLink from 'next/link'
 
 export const Link = ({ children, ...props }) => {
@@ -8,10 +9,15 @@ export const Link = ({ children, ...props }) => {
   )
 }
 
-export const NavLink = ({ children, ...props }) => {
+export const NavLink = ({ active, children, ...props }) => {
   return (
     <NextLink {...props}>
-      <a className="ease my-2 rounded border border-gray-200 p-2 text-center font-semibold text-gray-800 hover:text-sky-600 hover:shadow-sm">
+      <a
+        className={clsx(
+          'ease my-2 rounded border border-gray-200 p-2 text-center font-semibold text-gray-800 hover:text-sky-600 hover:shadow-sm',
+          active && 'text-sky-600'
+        )}
+      >
         {children}
       </a>
     </NextLink>

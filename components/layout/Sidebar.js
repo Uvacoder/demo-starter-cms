@@ -1,11 +1,12 @@
 import clsx from 'clsx'
-import Link from 'next/link'
+import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import { NavLink } from '../common/Links'
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false)
   const handleToggle = () => setIsOpen((prev) => !prev)
+  const { pathname } = useRouter()
 
   return (
     <>
@@ -25,8 +26,34 @@ const Sidebar = () => {
           onClick={handleToggle}
           className={clsx('flex h-full flex-col px-3 py-6')}
         >
-          <NavLink href={'/'}>Home</NavLink>
-          <NavLink href={'/products'}>Products</NavLink>
+          <NavLink active={pathname === '/'} href={'/'}>
+            Home
+          </NavLink>
+          <NavLink
+            active={pathname === '/customers' || pathname === '/customer'}
+            href={'/customers'}
+          >
+            Customers
+          </NavLink>
+          <NavLink
+            active={pathname === '/orders' || pathname === '/order'}
+            href={'/orders'}
+          >
+            Orders
+          </NavLink>
+          <NavLink
+            active={pathname === '/products' || pathname === '/product'}
+            href={'/products'}
+          >
+            Products
+          </NavLink>
+          <button
+            className={clsx(
+              'ease my-2 rounded border border-gray-200 p-2 text-center font-semibold text-gray-800 hover:text-sky-600 hover:shadow-sm focus:text-sky-600'
+            )}
+          >
+            Log out
+          </button>
         </nav>
       </div>
     </>
