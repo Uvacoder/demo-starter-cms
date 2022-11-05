@@ -1,16 +1,27 @@
 import { Dialog, Transition } from '@headlessui/react'
 import React, { Fragment, useState } from 'react'
+import { useDeleteProduct } from '../../lib/hooks/useDeleteProduct'
+
 import Button from '../common/Button'
 
-const DeleteProduct = ({ productId }) => {
+const DeleteProduct = ({ productId, ...props }) => {
   const [isOpen, setIsOpen] = useState(false)
+  const { mutateAsync, isLoading } = useDeleteProduct(productId)
   const handleClose = () => setIsOpen(false)
   const handleOpen = () => setIsOpen(true)
-  const handleDelete = async () => console.log(productId)
+
+  const handleDelete = async () => {
+    try {
+      await mutateAsync(productId)
+      handleClose()
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <>
-      <Button onClick={handleOpen} variant="text" type="button">
+      <Button onClick={handleOpen} variant="text" type="button" {...props}>
         Delete
       </Button>
       <Transition appear show={isOpen} as={Fragment}>
@@ -59,7 +70,12 @@ const DeleteProduct = ({ productId }) => {
                     >
                       Cancel
                     </Button>
-                    <Button className="flex-1" onClick={handleDelete}>
+                    <Button
+                      loading={isLoading}
+                      loadingText={'Deleting...'}
+                      className="flex-1"
+                      onClick={handleDelete}
+                    >
                       Delete
                     </Button>
                   </div>

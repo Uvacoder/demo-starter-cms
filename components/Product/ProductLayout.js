@@ -39,7 +39,7 @@ const ProductLayout = ({ product }) => {
                   width={500}
                   className="aspect-video max-h-[281px] max-w-[500px] rounded"
                   src={product.thumbnail}
-                  alt={''}
+                  alt={product.name}
                 />
               </a>
             </Link>

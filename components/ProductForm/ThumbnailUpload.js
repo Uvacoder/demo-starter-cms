@@ -14,11 +14,42 @@ const ThumbnailUpload = ({ defaultValue, setValue }) => {
     reader.readAsDataURL(changeEvent.target.files[0])
   }
 
-  const handleUpload = (e) => {}
+  const handleUpload = async (uploadEvent) => {
+    uploadEvent.preventDefault()
+    setLoading(true)
+    const form = uploadEvent.currentTarget
+    const fileInput = Array.from(form.elements).find(
+      ({ name }) => name === 'file'
+    )
+    try {
+      const formData = new FormData()
+      // adding upload preset
+      formData.append('upload_preset', 'vnqoc9iz')
+
+      for (const file of fileInput.files) {
+        formData.append('file', file)
+      }
+      const res = await fetch(
+        'https://api.cloudinary.com/v1_1/scrapbook/image/upload',
+        {
+          method: 'POST',
+          body: formData,
+        }
+      )
+      const data = await res.json()
+      setImageSrc(data.secure_url)
+      setValue('thumbnail', data.secure_url)
+      setUploadData(data)
+    } catch (error) {
+      console.log(error)
+    }
+    setLoading(false)
+  }
 
   return (
-    <form onSubmit={() => console.log('submited')}>
+    <form onSubmit={handleUpload}>
       <input
+        name="file"
         type="file"
         onChange={handleOnChange}
         className="mb-3 w-full rounded-md border p-3 focus:border-sky-300 focus:ring-sky-300"

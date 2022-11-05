@@ -1,13 +1,12 @@
 import Layout from '../components/layout'
 import ProductItems from '../components/Products/ProductItems'
-import { useState } from 'react'
 import ProductItemsSkeleton from '../components/Products/ProductItemsSkeleton'
 import ProductHeader from '../components/Products/ProductHeader'
 import AddProduct from '../components/Product/AddProduct'
+import { useGetProducts } from '../lib/hooks'
 
 function Products() {
-  const [loading, setLoading] = useState(false)
-  const [products, setProducts] = useState([])
+  const { isLoading, isError, error, data: products } = useGetProducts()
 
   return (
     <div>
@@ -18,8 +17,12 @@ function Products() {
         </div>
       </header>
       <ProductHeader />
-      {loading ? (
+      {isLoading ? (
         <ProductItemsSkeleton />
+      ) : isError ? (
+        <div className="h-[100px] w-full text-center font-bold text-gray-300">
+          {error?.message || 'Something went wrong!'}
+        </div>
       ) : (
         <ProductItems products={products} />
       )}
@@ -30,5 +33,5 @@ function Products() {
 export default Products
 
 Products.getLayout = function getLayout(page) {
-  return <Layout meta={{ name: 'Products' }}>{page}</Layout>
+  return <Layout meta={{ name: ['products'] }}>{page}</Layout>
 }

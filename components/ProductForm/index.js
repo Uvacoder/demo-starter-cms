@@ -32,7 +32,7 @@ const ProductForm = ({ type, defaultValues, onFormSubmit, ...props }) => {
   })
 
   return (
-    <div {...props} className="flex flex-col space-y-6">
+    <div className="flex flex-col space-y-6">
       <form>
         <FormSection defaultOpen={true} title={'Product Information'}>
           <Input
@@ -52,8 +52,7 @@ const ProductForm = ({ type, defaultValues, onFormSubmit, ...props }) => {
             name="description"
             label="Description (optional)"
             placeholder="Warm and cozy. Beautiful and elegant..."
-            type="text"
-            multiline
+            type="textarea"
             error={errors.description ? errors.description.message : false}
             register={register('description')}
           />
@@ -103,7 +102,7 @@ const ProductForm = ({ type, defaultValues, onFormSubmit, ...props }) => {
         <MediaUpload defaultValues={defaultValues?.media} setValue={setValue} />
       </FormSection>
 
-      <Button type="button" onClick={onSubmit} className="w-full">
+      <Button type="button" onClick={onSubmit} className="w-full" {...props}>
         {type ? `${type} Product` : 'Submit'}
       </Button>
     </div>

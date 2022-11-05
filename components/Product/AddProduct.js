@@ -1,16 +1,22 @@
 import { Dialog, Transition } from '@headlessui/react'
 import React, { Fragment, useState } from 'react'
+import { useAddProduct } from '../../lib/hooks'
 import Button from '../common/Button'
 import { Close } from '../common/icons/Close'
 import ProductForm from '../ProductForm'
 
 const AddProduct = ({ props }) => {
   const [isOpen, setIsOpen] = useState(false)
+  const { mutateAsync, isLoading } = useAddProduct()
   const handleClose = () => setIsOpen(false)
   const handleOpen = () => setIsOpen(true)
-  const onFormSubmit = (data) => {
-    console.log(data)
-    handleClose()
+  const onFormSubmit = async (data) => {
+    try {
+      await mutateAsync(data)
+      handleClose()
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (
@@ -48,11 +54,16 @@ const AddProduct = ({ props }) => {
                     as="div"
                     className="mb-5 flex items-center justify-between text-lg font-semibold leading-6 text-gray-800"
                   >
-                    <h3>Update Product</h3>
+                    <h3>Add Product</h3>
                     <Close onClick={handleClose} />
                   </Dialog.Title>
 
-                  <ProductForm type={'Add'} onFormSubmit={onFormSubmit} />
+                  <ProductForm
+                    loading={isLoading}
+                    loadingText={'Adding product...'}
+                    type={'Add'}
+                    onFormSubmit={onFormSubmit}
+                  />
                 </Dialog.Panel>
               </Transition.Child>
             </div>

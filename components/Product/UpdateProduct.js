@@ -1,17 +1,23 @@
 import { Dialog, Transition } from '@headlessui/react'
 import React, { Fragment, useState } from 'react'
+import { useUpdateProduct } from '../../lib/hooks/useUpdateProduct'
 import Button from '../common/Button'
 import { Close } from '../common/icons/Close'
 import ProductForm from '../ProductForm'
 
-const UpdateProduct = ({ product, ...props }) => {
+const UpdateProduct = ({ productId, product, ...props }) => {
   const [isOpen, setIsOpen] = useState(false)
+  const { mutateAsync, isLoading } = useUpdateProduct(productId)
   const handleClose = () => setIsOpen(false)
   const handleOpen = () => setIsOpen(true)
 
   const onFormSubmit = async (data) => {
-    console.log(data)
-    handleClose()
+    try {
+      await mutateAsync({ id: productId, ...data })
+      handleClose()
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (
@@ -55,6 +61,8 @@ const UpdateProduct = ({ product, ...props }) => {
 
                   <ProductForm
                     defaultValues={product}
+                    loading={isLoading}
+                    loadingText={'Updating product...'}
                     onFormSubmit={onFormSubmit}
                     type={'Update'}
                   />
