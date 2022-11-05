@@ -10,6 +10,41 @@
         { "name": "thumbnail", "type": "string" },
         { "name": "media", "type": "multiple" }
       ]
+    },
+    {
+      "name": "customers",
+      "columns": [
+        { "name": "username", "type": "string" },
+        { "name": "email", "type": "email" },
+        { "name": "password", "type": "string" },
+        { "name": "avatar", "type": "string" }
+      ]
+    },
+    {
+      "name": "orders",
+      "columns": [
+        {
+          "name": "user",
+          "type": "link",
+          "link": {
+            "table": "customers"
+          }
+        },
+        {
+          "name": "product",
+          "type": "link",
+          "link": {
+            "table": "products"
+          }
+        }
+      ]
+    },
+    {
+      "name": "users",
+      "columns": [
+        { "name": "email", "type": "email" },
+        { "name": "password", "type": "string" }
+      ]
     }
   ]
 }
